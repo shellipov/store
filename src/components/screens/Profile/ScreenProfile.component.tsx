@@ -13,6 +13,7 @@ import { TextInputUI } from '@components/ui/TextInputUI';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useInjection } from 'inversify-react';
 import { TYPES } from '@/boot/IoC/types';
+import { createRefreshFunction } from '@/helpers';
 
 export interface IScreenProfileProps {}
 
@@ -48,15 +49,7 @@ export const ScreenProfile = observer((props: { route: { params: IScreenProfileP
     setAddress(text);
   }, [name]);
 
-  const onRefresh = () => {
-    if (userStore.isError) {
-      userStore.refresh().then();
-      userStore.refresh().then();
-    }
-    if (cartStore.isError) {
-      cartStore.refresh().then();
-    }
-  };
+  const onRefresh = createRefreshFunction([userStore, cartStore]);
 
   const logout = useCallback(()=> {
     Alert.alert(

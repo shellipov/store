@@ -7,7 +7,7 @@ import { First } from '@shared/Firts';
 import { CartBlockComponent } from '@shared/CartBlock';
 import { NavBar } from '@shared/NavBar';
 import { Screen } from '@shared/Screen';
-import { eventCreator } from '@/helpers';
+import { createRefreshFunction, eventCreator } from '@/helpers';
 import { ICartDataStore, IEventDataStore, IProductDataStore, IUserDataStore } from '@/api';
 import { EventTypeEnum, ISimplifiedEventData } from '@/api/EventDataStore';
 import { TextUI } from '@components/ui/TextUI';
@@ -15,6 +15,7 @@ import { ButtonUI } from '@components/ui/ButtonUI';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useInjection } from 'inversify-react';
 import { TYPES } from '@/boot/IoC/types';
+import { Loader } from '@shared/Loader';
 
 export interface IScreenProductCardProps {
     id: number;
@@ -33,20 +34,12 @@ export const ScreenProductCard = observer((props: { route: { params: IScreenProd
 
   const isError = cartStore.isError || eventStore.isError || userStore.isError || productStore.isError;
 
-  const onRefresh = () => {
-    if (cartStore.isError) {
-      cartStore.refresh().then();
-    }
-    if (eventStore.isError) {
-      eventStore.refresh().then();
-    }
-    if (userStore.isError) {
-      userStore.refresh().then();
-    }
-    if (productStore.isError) {
-      productStore.refresh().then();
-    }
-  };
+  const onRefresh = createRefreshFunction([
+    cartStore,
+    eventStore,
+    userStore,
+    productStore,
+  ]);
 
   useEffect(() => {
     productStore.refresh().then();
@@ -78,38 +71,39 @@ export const ScreenProductCard = observer((props: { route: { params: IScreenProd
     }
   }, [item, cartStore.model.data?.length]);
 
-  if (!item) {
-    return null;
-  }
-
   return (
     <Screen isError={isError} onRefresh={onRefresh}>
       <NavBar title={'Карточка товара'} />
-      <ScrollView style={{ backgroundColor: theme.color.bgAdditional }}>
-        <View style={{ flex: 1, flexDirection: 'column' }}>
-          <View style={ [styles.imageView, { backgroundColor: theme.color.bgGray }]}>
-            <Image src={item?.image} resizeMode="cover" style={styles.image} />
+      <First>
+        {!item && (
+          <Loader />
+        )}
+        <ScrollView style={{ backgroundColor: theme.color.bgAdditional }}>
+          <View style={{ flex: 1, flexDirection: 'column' }}>
+            <View style={ [styles.imageView, { backgroundColor: theme.color.bgGray }]}>
+              <Image src={item?.image} resizeMode="cover" style={styles.image} />
+            </View>
+            <View style={{ flex: 2, flexDirection: 'column', paddingHorizontal: 24 }}>
+              <View style={{ marginVertical: 8 }}>
+                <TextUI text={item?.name} size={'title'} numberOfLines={1} />
+              </View>
+              <View style={{ marginVertical: 6 }}>
+                <TextUI text={item?.description} size={'large'} numberOfLines={1} />
+              </View>
+              <View style={{ marginVertical: 6, flexDirection: 'row', alignItems: 'center' }}>
+                <Ionicons name={'star'} size={24} color={theme.color.elementPrimary} />
+                <TextUI text={` - ${item?.productRating}`} size={'medium'} />
+              </View>
+              <View style={{ marginVertical: 6 }}>
+                <TextUI text={item?.price + ' ₽'} size={'title'} style={{ color:theme.color.textGreen }} />
+              </View>
+              <View style={{ marginVertical: 6, flexDirection: 'row', alignItems: 'center' }}>
+                <TextUI text={`осталось ${item?.quantityOfGoods} шт.`} size={'medium'} />
+              </View>
+            </View>
           </View>
-          <View style={{ flex: 2, flexDirection: 'column', paddingHorizontal: 24 }}>
-            <View style={{ marginVertical: 8 }}>
-              <TextUI text={item?.name} size={'title'} numberOfLines={1} />
-            </View>
-            <View style={{ marginVertical: 6 }}>
-              <TextUI text={item?.description} size={'large'} numberOfLines={1} />
-            </View>
-            <View style={{ marginVertical: 6, flexDirection: 'row', alignItems: 'center' }}>
-              <Ionicons name={'star'} size={24} color={theme.color.elementPrimary} />
-              <TextUI text={` - ${item?.productRating}`} size={'medium'} />
-            </View>
-            <View style={{ marginVertical: 6 }}>
-              <TextUI text={item?.price + ' ₽'} size={'title'} style={{ color:theme.color.textGreen }} />
-            </View>
-            <View style={{ marginVertical: 6, flexDirection: 'row', alignItems: 'center' }}>
-              <TextUI text={`осталось ${item?.quantityOfGoods} шт.`} size={'medium'} />
-            </View>
-          </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </First>
       <View style={styles.bottomBlock}>
         {/* TODO: пока не работает */}
         <ButtonUI title={'в избранное'} style={{ width: '48%' }} disabled={true} />

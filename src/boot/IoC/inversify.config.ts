@@ -3,9 +3,11 @@ import { TYPES } from './types';
 import { IThemeStore, ThemeStore } from '@/store';
 import {
   CartDataStore,
+  CategoryDataStore,
   ErrorDataStore,
   EventDataStore,
   ICartDataStore,
+  ICategoryDataStore,
   IErrorDataStore,
   IEventDataStore,
   IOrderDataStore,
@@ -32,6 +34,7 @@ container.bind<IErrorDataStore>(TYPES.ErrorDataStore).to(ErrorDataStore);
 container.bind<IEventDataStore>(TYPES.EventDataStore).to(EventDataStore);
 container.bind<IOrderDataStore>(TYPES.OrderDataStore).to(OrderDataStore);
 container.bind<IProductDataStore>(TYPES.ProductDataStore).to(ProductDataStore);
+container.bind<ICategoryDataStore>(TYPES.CategoryDataStore).to(CategoryDataStore);
 // view models
 container.bind<IScreenMainVM>(TYPES.ScreenMainVM).to(ScreenMainVM);
 container.bind<IScreenErrorsVM>(TYPES.ScreenErrorsVM).to(ScreenErrorsVM);

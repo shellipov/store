@@ -13,6 +13,7 @@ import { useInjection } from 'inversify-react';
 import { IOrderDataStore, IUserDataStore } from '@/api';
 import { TYPES } from '@/boot/IoC/types';
 import { Loader } from '@shared/Loader';
+import { createRefreshFunction } from '@/helpers';
 
 export interface IScreenOrderListProps {}
 
@@ -30,15 +31,7 @@ export const ScreenOrderList = observer((props: { route: { params: IScreenOrderL
 
   const isError = userStore.isError || orderStore.isError;
 
-  const onRefresh = () => {
-    if (userStore.isError) {
-      userStore.refresh().then();
-    }
-
-    if (orderStore.isError) {
-      orderStore.refresh().then();
-    }
-  };
+  const onRefresh = createRefreshFunction([userStore, orderStore]);
 
   const renderItem = ({ item }: { item: any }) => (
     <TouchableOpacity style={[styles.item, { backgroundColor: theme.color.bgAdditionalTwo }]} onPress={() => navigation.navigate('Order', { order: item })}>

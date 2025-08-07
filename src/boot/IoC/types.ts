@@ -8,6 +8,7 @@ export const TYPES = {
   EventDataStore: Symbol.for('EventDataStore'),
   OrderDataStore: Symbol.for('OrderDataStore'),
   ProductDataStore: Symbol.for('ProductDataStore'),
+  CategoryDataStore: Symbol.for('CategoryDataStore'),
   // view models
   ScreenMainVM: Symbol.for('ScreenMainVM'),
   ScreenErrorsVM: Symbol.for('ScreenErrorsVM'),

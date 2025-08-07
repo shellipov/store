@@ -8,10 +8,10 @@ import { NavBar } from '@shared/NavBar';
 import { Row } from '@shared/Row';
 import { Col } from '@shared/Col';
 import { Screen } from '@shared/Screen';
-import { paginationData } from '@/helpers';
+import { createRefreshFunction, paginationData } from '@/helpers';
 import { FlatListWithPagination } from '@shared/FlatListWithPagination';
 import { TextUI } from '@components/ui/TextUI';
-import { CategoryEnum, ICartDataStore, IProductDataStore } from '@/api';
+import { CategoryEnum, ICartDataStore, ICategoryDataStore, IProductDataStore } from '@/api';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useInjection } from 'inversify-react';
 import { TYPES } from '@/boot/IoC/types';
@@ -29,6 +29,7 @@ export const ScreenCategory = observer((props: { route: { params: IScreenCategor
   const navigation = useNavigationHook();
   const cartStore = useInjection<ICartDataStore>(TYPES.CartDataStore);
   const productStore = useInjection<IProductDataStore>(TYPES.ProductDataStore);
+  const categoryStore = useInjection<ICategoryDataStore>(TYPES.CategoryDataStore);
   const data = productStore.getCategory(category);
   const formattedData = paginationData(data);
   const pageButtons = Object.keys(formattedData);
@@ -40,17 +41,11 @@ export const ScreenCategory = observer((props: { route: { params: IScreenCategor
   const onPressItem = useCallback((id: number)=> navigation.navigate('ProductCard', { id }), []);
 
   useEffect(() => {
+    categoryStore.refresh().then();
     productStore.refresh().then();
   }, []);
 
-  const onRefresh = useCallback(() => {
-    if (productStore.isError) {
-      productStore.refresh().then();
-    }
-    if (cartStore.isError) {
-      cartStore.refresh().then();
-    }
-  }, [productStore.isError, cartStore.isError]);
+  const onRefresh = createRefreshFunction([productStore, cartStore]);
 
   const renderProductItem = useCallback(({ item }: { item: any }) => (
     <TouchableOpacityUI
@@ -81,7 +76,7 @@ export const ScreenCategory = observer((props: { route: { params: IScreenCategor
 
   return (
     <Screen isError={productStore.isError || cartStore.isError} onRefresh={onRefresh}>
-      <NavBar title={productStore.getCategoryName(category)} />
+      <NavBar title={categoryStore.getCategoryName(category)} />
       <First>
         {productStore.isLoading && (
           <Loader />

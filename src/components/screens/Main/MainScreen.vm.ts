@@ -12,7 +12,7 @@ export interface IScreenMainVMProps extends IScreenMainProps, IVMProps {}
 @injectable()
 export class ScreenMainVM implements IScreenMainVM {
     @inject(TYPES.CartDataStore) public cartStore!: api.ICartDataStore;
-    @inject(TYPES.ProductDataStore) public productStore!: api.IProductDataStore;
+    @inject(TYPES.CategoryDataStore) public categoryStore!: api.ICategoryDataStore;
     @observable private _isActive: boolean = false;
     private readonly _propsHolder = new ValueHolder<Maybe<IScreenMainVMProps>>(undefined);
     private _disposers: IReactionDisposer[] = [];
@@ -44,22 +44,22 @@ export class ScreenMainVM implements IScreenMainVM {
 
     @computed
     public get categories () {
-      return this.productStore.categories;
+      return this.categoryStore.categories;
     }
 
     @computed
     public get isError () {
-      return this.productStore.isError || this.cartStore.isError;
+      return this.categoryStore.isError || this.cartStore.isError;
     }
 
     @computed
     public get isLoading () {
-      return this.productStore.isLoading || this.cartStore.isLoading;
+      return this.categoryStore.isLoading || this.cartStore.isLoading;
     }
 
     public onRefresh = () => {
-      if (this.productStore.isError) {
-        this.productStore.refresh().then();
+      if (this.categoryStore.isError) {
+        this.categoryStore.refresh().then();
       }
       if (this.cartStore.isError) {
         this.cartStore.refresh().then();
@@ -73,7 +73,7 @@ export class ScreenMainVM implements IScreenMainVM {
 
     @action.bound
     private async _refresh () {
-      this.productStore.refresh().then();
+      this.categoryStore.refresh().then();
       this.cartStore.refresh().then();
     }
 
