@@ -9,6 +9,7 @@ import { IScreenOrderListProps } from '@components/screens/OrderList';
 import { IScreenStatisticsProps } from '@components/screens/Statistics';
 import { IScreenErrorsProps } from '@components/screens/Errors';
 import { IScreenMainProps } from '@components/screens/Main';
+import { IScreenSearchProps } from '@components/screens/Search';
 
 export enum Routes {
     Main = 'Main',
@@ -22,6 +23,7 @@ export enum Routes {
     Profile = 'Profile',
     Statistics = 'Statistics',
     Errors = 'Errors',
+    Search = 'Search',
 }
 export type RootStackParamList = {
     Main: IScreenMainProps | undefined;
@@ -35,6 +37,7 @@ export type RootStackParamList = {
     OrderList: IScreenOrderListProps | undefined ;
     Statistics: IScreenStatisticsProps | undefined ;
     Errors: IScreenErrorsProps | undefined ;
+    Search: IScreenSearchProps | undefined ;
 };
 
 

@@ -1,20 +1,18 @@
 // @ts-ignore
 import Ionicons from 'react-native-vector-icons/AntDesign';
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { TextUI } from '../../ui/TextUI';
 import { useNavigationHook } from '@/hooks/useNavigation';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useInjection } from 'inversify-react';
 import { ICartDataStore } from '@/api';
 import { TYPES } from '@/boot/IoC/types';
 
-export const CartBlockComponent = observer(()=> {
+export const SearchBlockComponent = observer(()=> {
   const navigation = useNavigationHook();
   const theme = useAppTheme();
   const cartStore = useInjection<ICartDataStore>(TYPES.CartDataStore);
-  const onPressCart = useCallback(()=> navigation.navigate('Cart'), [navigation]);
 
   useEffect(() => {
     if (cartStore.isEmpty) {
@@ -22,14 +20,12 @@ export const CartBlockComponent = observer(()=> {
     }
   }, [cartStore.isEmpty]);
 
-  const backgroundColor = { backgroundColor: theme.color.elementPrimary };
-
+  const backgroundColor = { backgroundColor: theme.color.elementGreen };
 
   return (
     <TouchableOpacity
-      style={[styles.cartBlock, backgroundColor]} onPress={onPressCart}>
-      <Ionicons name={'shoppingcart'} size={28} color={theme.color.black} />
-      <TextUI size={'small'} style={{ color: theme.color.textGreen }} text={`${cartStore.model.cartSum} ₽`} />
+      style={[styles.cartBlock, backgroundColor]} onPress={()=> navigation.navigate('Search')}>
+      <Ionicons name={'search1'} size={36} color={theme.color.white} />
     </TouchableOpacity>
   );
 });
@@ -39,7 +35,7 @@ const styles = StyleSheet.create({
     height: 88,
     width: 88,
     borderRadius: 44,
-    borderBottomRightRadius: 16,
+    borderBottomLeftRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,

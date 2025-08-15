@@ -279,8 +279,8 @@ const styleProcessors = {
   },
 
   size: (props: SizeProps, ss: ViewStyle) => {
-    extractStyleProp(props, 'width', v => ss.width = v);
-    extractStyleProp(props, 'height', v => ss.height = v);
+    extractStyleProp(props, 'width', v => ss.width = v === true ? '100%' : v);
+    extractStyleProp(props, 'height', v => ss.height = v === true ? '100%' : v);
     extractStyleProp(props, 'minHeight', v => ss.minHeight = v);
     extractStyleProp(props, 'maxHeight', v => ss.maxHeight = v);
     extractStyleProp(props, 'minWidth', v => ss.minWidth = v);

@@ -13,7 +13,7 @@ export interface ICategoryDataStore {
   readonly isError: boolean;
   readonly isLoading: boolean;
   readonly categories: ICategoryItem[]
-  getCategoryName(type: CategoryEnum) : string
+  getCategoryName(type?: CategoryEnum | string) : string
   refresh(): Promise<void>;
 }
 
@@ -40,7 +40,7 @@ export class CategoryDataStore implements ICategoryDataStore {
     return this._holder.isLoading;
   }
 
-  public getCategoryName (type: CategoryEnum) : string {
+  public getCategoryName (type?: CategoryEnum) : string {
     return this.categories.find(i => i.type === type)?.name || '';
   }
 

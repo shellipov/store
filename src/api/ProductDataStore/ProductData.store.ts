@@ -15,13 +15,16 @@ export interface IProductDataStore {
   readonly products: ProductListType | undefined;
   getCategory(category: CategoryEnum) : (IProduct | never)[]
   getProduct(id: number) : IProduct | undefined
+  searchProduct (value: string) : ProductListType | undefined
   getSimplifiedProduct(id: number) : ISimplifiedProduct | undefined
   refresh(): Promise<void>;
+  dispose(): void;
 }
 
 @injectable()
 export class ProductDataStore implements IProductDataStore {
   private _holder = new AsyncDataHolder<IGetFakeProductResponse>();
+  private _disposers: (() => void)[] = [];
 
   public constructor () {
     makeObservable(this);
@@ -50,6 +53,20 @@ export class ProductDataStore implements IProductDataStore {
     return this.products?.map(i => i.products).flat().find(product => product.id === id);
   }
 
+  public searchProduct (value: string): ProductListType | undefined {
+    if (!value) { return undefined; }
+
+    return this.products
+      ?.map((category, index) => ({
+        id: index,
+        ...category,
+        products: category.products.filter(product =>
+          product.name.toLowerCase().includes(value.toLowerCase()),
+        ),
+      }))
+      .filter(category => category.products.length > 0);
+  }
+
   public getSimplifiedProduct (id: number) : ISimplifiedProduct | undefined {
     const item = this.products?.map(i => i.products).flat().find(product => product.id === id);
 
@@ -74,5 +91,10 @@ export class ProductDataStore implements IProductDataStore {
       this._holder.setError(error);
       await errorService({ type:ErrorTypeEnum.LoadData, error, withoutAlerts: true });
     }
+  }
+
+  public dispose (): void {
+    this._disposers.forEach(dispose => dispose());
+    this._disposers = [];
   }
 }

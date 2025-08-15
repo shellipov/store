@@ -14,6 +14,7 @@ import { ScreenOrderList } from '@components/screens/OrderList';
 import { ScreenStatistics } from '@components/screens/Statistics';
 import { ScreenErrors } from '@components/screens/Errors';
 import { ScreenMain } from '@components/screens/Main';
+import { ScreenSearchComponent } from '@components/screens/Search';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { TextUI } from '@components/ui/TextUI';
 import { ButtonUI } from '@components/ui/ButtonUI';
@@ -47,6 +48,7 @@ export const AppRouter = observer(() => {
     OrderList: { screen: ScreenOrderList },
     Statistics: { screen: ScreenStatistics },
     Errors: { screen: ScreenErrors },
+    Search: { screen: ScreenSearchComponent },
   };
 
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -75,12 +77,12 @@ export const AppRouter = observer(() => {
           (Object.keys(AUTH_SCREENS) as (keyof typeof AUTH_SCREENS)[]).map((name) => (
             <Stack.Screen
               key={name} name={name} component={AUTH_SCREENS[name]!.screen}
-              options={AUTH_SCREENS[name]!.navigationOptions} />
+              options={{ ...AUTH_SCREENS[name]!.navigationOptions, keyboardHandlingEnabled: false }} />
           )))}
         {(Object.keys(NOT_AUTH_SCREENS) as (keyof typeof NOT_AUTH_SCREENS)[]).map((name) => (
           <Stack.Screen
             key={name} name={name} component={NOT_AUTH_SCREENS[name]!.screen}
-            options={NOT_AUTH_SCREENS[name]!.navigationOptions} />
+            options={{ ...NOT_AUTH_SCREENS[name]!.navigationOptions, keyboardHandlingEnabled: false }} />
         ))}
       </Stack.Navigator>
     </NavigationContainer>

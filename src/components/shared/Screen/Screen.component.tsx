@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, View, ViewProps } from 'react-native';
+import { KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, View, ViewProps } from 'react-native';
 import { DebugPanel } from '@/debug';
 import { TextUI } from '../../ui/TextUI';
 import { ButtonUI } from '../../ui/ButtonUI';
@@ -8,18 +8,22 @@ import { useRoute } from '@react-navigation/native';
 import { Routes } from '@/AppPouter.types';
 import { observer } from 'mobx-react';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import { FlexProps } from '@/utils/PropsStyles';
+import { ColorValue } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-interface IScreenProps extends ViewProps {
+interface IScreenProps extends ViewProps, FlexProps {
     isError?: boolean;
+    topColor?: ColorValue;
     onRefresh?: () => void;
 }
 
 export const Screen = observer((props: IScreenProps) => {
-  const { children, isError, style, ...rest } = props;
+  const { children, isError, topColor, style, ...rest } = props;
   const route = useRoute();
   const theme = useAppTheme();
   const isMain = route.name === Routes.Main;
   const bgColor = { backgroundColor: theme.color.bgBasic };
+  const statusBarColor = { backgroundColor: topColor || theme.color.bgBasic };
 
   if (isError) {
     return (
@@ -39,10 +43,21 @@ export const Screen = observer((props: IScreenProps) => {
   }
 
   return (
-    <SafeAreaView style={[styles.screen, bgColor, style]} {...rest}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : StatusBar.currentHeight || 0}>
       <DebugPanel />
-      {children}
-    </SafeAreaView>
+      {/* Верхняя зона */}
+      <SafeAreaView style={[{ width: '100%' }, statusBarColor]}>
+        <StatusBar backgroundColor={topColor || theme.color.bgBasic} />
+      </SafeAreaView>
+
+      <SafeAreaView style={[styles.screen, bgColor, style]} {...rest}>
+        {children}
+      </SafeAreaView>
+
+    </KeyboardAvoidingView>
   );
 });
 

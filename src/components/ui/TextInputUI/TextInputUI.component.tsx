@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { StyleSheet, TextInput, TextInputProps } from 'react-native';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import { useNavigationHook } from '@/hooks/useNavigation';
+import { FlexProps } from '@/utils/PropsStyles';
 
 type TextSize = 'small' | 'medium' | 'large';
 
-export interface ITextInputUIProps extends TextInputProps{
+export interface ITextInputUIProps extends TextInputProps, FlexProps{
     textSize: TextSize;
     isError?: boolean;
     children?: React.ReactNode;
@@ -26,17 +28,30 @@ const TEXT_SIZE = {
 };
 
 export function TextInputUI (props: ITextInputUIProps) {
-  const { children, textSize, isError, style, ...rest } = props;
+  const { children, textSize, isError, style, autoFocus, ...rest } = props;
   const theme = useAppTheme();
+  const navigation = useNavigationHook();
   const { color } = theme;
   const borderColor = isError ? color.elementDanger : color.secondaryPrimary;
+  const inputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    if (!autoFocus) { return undefined; }
+    const unsubscribe = navigation.addListener('transitionEnd', () => {
+      // Фокусируем только после окончания анимации перехода
+      inputRef.current?.focus();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <TextInput
+      ref={inputRef}
       cursorColor={color.textPrimary}
       style={[
         styles.textInput,
-        { color: color.textPrimary, borderColor },
+        { color: color.textPrimary, borderColor, backgroundColor: color.bgBasic },
         TEXT_SIZE[textSize],
         style]} {...rest}>
       {children}

@@ -23,6 +23,8 @@ import { ScreenErrorsVM } from '@components/screens/Errors/ScreenErrors.vm';
 import { IScreenErrorsVM } from '@components/screens/Errors/ScreenErrors.types';
 import { ScreenCreateOrderVM } from '@components/screens/CreateOrder/ScreenCreateOrder.vm';
 import { IScreenCreateOrderVM } from '@components/screens/CreateOrder';
+import { IScreenSearchVM } from '@components/screens/Search/ScreenSearch.types';
+import { ScreenSearchVM } from '@components/screens/Search/ScreenSearch.vm';
 
 const container = new Container();
 // system stores
@@ -39,6 +41,7 @@ container.bind<ICategoryDataStore>(TYPES.CategoryDataStore).to(CategoryDataStore
 container.bind<IScreenMainVM>(TYPES.ScreenMainVM).to(ScreenMainVM);
 container.bind<IScreenErrorsVM>(TYPES.ScreenErrorsVM).to(ScreenErrorsVM);
 container.bind<IScreenCreateOrderVM>(TYPES.ScreenCreateOrderVM).to(ScreenCreateOrderVM);
+container.bind<IScreenSearchVM>(TYPES.ScreenSearchVM).to(ScreenSearchVM);
 
 export { container };
 

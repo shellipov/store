@@ -13,4 +13,5 @@ export const TYPES = {
   ScreenMainVM: Symbol.for('ScreenMainVM'),
   ScreenErrorsVM: Symbol.for('ScreenErrorsVM'),
   ScreenCreateOrderVM: Symbol.for('ScreenCreateOrderVM'),
+  ScreenSearchVM: Symbol.for('ScreenSearchVM'),
 };

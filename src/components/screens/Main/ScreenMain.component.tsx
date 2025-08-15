@@ -21,6 +21,7 @@ import { useAppState } from '@/hooks/useAppState';
 import { CategoryEnum } from '@/api';
 import { First } from '@shared/Firts';
 import { Loader } from '@shared/Loader';
+import { SearchBlockComponent } from '@shared/SearchBlock';
 
 export const ScreenMain = observer((props: { route: { params: IScreenMainProps } }) => {
   const { isActive } = useAppState();
@@ -73,6 +74,9 @@ export const ScreenMain = observer((props: { route: { params: IScreenMainProps }
             header={renderListHeader}
             numColumns={3} />
         </First>
+        <Col absolute left={16} bottom={16}>
+          <SearchBlockComponent />
+        </Col>
         <Col absolute right={16} bottom={16}>
           <CartBlockComponent />
         </Col>

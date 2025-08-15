@@ -54,7 +54,7 @@ export class ScreenMainVM implements IScreenMainVM {
 
     @computed
     public get isLoading () {
-      return this.categoryStore.isLoading || this.cartStore.isLoading;
+      return (this.categoryStore.isLoading || this.cartStore.isLoading) && !this.categories.length;
     }
 
     public onRefresh = () => {

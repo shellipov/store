@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { FlatList, ListRenderItem, StyleSheet, View, ViewProps } from 'react-native';
+import {FlatList, FlatListProps, ListRenderItem, StyleSheet, View, ViewProps} from 'react-native';
 import { FlatListVars } from '@/settings/FlatList.vars';
 import { Chip } from '../Chip';
 import { paginationData } from '@/helpers';
@@ -85,6 +85,7 @@ export const FlatListWithPagination = React.memo(<T extends IListItem>({
         data={formattedData[selectedPage] as T[]}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
+        keyboardShouldPersistTaps={'handled'}
         showsVerticalScrollIndicator={false}
         {...FlatListVars} />
 

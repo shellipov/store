@@ -1,5 +1,6 @@
 import { ApiStatusEnum } from '@/api/ApiTypes.types';
 import { CategoryEnum } from '@/api/CategoryDataStore';
+import { IListItem } from '@shared/FlatListWithPagination';
 
 
 export interface IProduct {
@@ -19,6 +20,13 @@ export type ProductListType = {
     category: CategoryEnum | string,
     products: IProduct[]
     }[]
+
+export interface ProductWithIdType extends IListItem {
+    data?: {
+        category: CategoryEnum | string,
+        products: IProduct[]
+    }
+}
 
 export interface IGetFakeProductResponse {
     data?: ProductListType;
