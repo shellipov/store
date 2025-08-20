@@ -6,6 +6,7 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { observer } from 'mobx-react';
 import { DebugVars } from '@/debug';
 import { reactotronInit } from '@/debug/reactotron';
+import { ModalProvider } from '@shared/ModalProvider';
 
 export const RootComponent = observer((): React.JSX.Element => {
   const { isActive } = useAppState();
@@ -26,7 +27,9 @@ export const RootComponent = observer((): React.JSX.Element => {
 
   return (
     <SafeAreaProvider style={{ backgroundColor: theme.color.bgBasic }}>
-      <AppRouter />
+      <ModalProvider>
+        <AppRouter />
+      </ModalProvider>
     </SafeAreaProvider>
   );
 });

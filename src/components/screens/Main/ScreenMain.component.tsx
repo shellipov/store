@@ -22,12 +22,15 @@ import { CategoryEnum } from '@/api';
 import { First } from '@shared/Firts';
 import { Loader } from '@shared/Loader';
 import { SearchBlockComponent } from '@shared/SearchBlock';
+import { useModal } from '@shared/ModalProvider';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const ScreenMain = observer((props: { route: { params: IScreenMainProps } }) => {
   const { isActive } = useAppState();
   const vm = useInjection<IScreenMainVM>(TYPES.ScreenMainVM);
   const navigation = useNavigationHook();
   const theme = useAppTheme();
+  const { showModal, hideModal } = useModal();
   const color = theme.color;
   const onPressProfile = useCallback(() => navigation.navigate('Profile'), []);
   const onPressItem = useCallback((type: CategoryEnum) => navigation.navigate('Category', { category: type }), []);
@@ -39,6 +42,19 @@ export const ScreenMain = observer((props: { route: { params: IScreenMainProps }
       vm.dispose();
     };
   }, [isActive]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const unsubscribe = navigation.addListener('transitionEnd', () => {
+        const random = Math.floor(Math.random() * 5) + 1;
+        if (random === 1) {
+          openAlert();
+        }
+      });
+
+      return unsubscribe;
+    }, [navigation]),
+  );
 
   const renderItem = useCallback(({ item }: { item: any }) => {
     return (
@@ -52,6 +68,18 @@ export const ScreenMain = observer((props: { route: { params: IScreenMainProps }
       </TouchableOpacityUI>
     );
   }, [color]);
+
+  const openAlert = () => {
+    showModal(
+      <Col flex justifyContent={'space-between'} alignItems={'center'}>
+        <TextUI size={'title'} alignItems={'center'} text={'Просто модалка что б\nвсех бесить'} style={{ textAlign: 'center' }} />
+        <TextUI size={'medium'} alignItems={'center'} text={'Нужно просто закрыть и смириться'} style={{ textAlign: 'center' }} />
+        <Row>
+          <ButtonUI title="Закрыть" onPress={hideModal} />
+        </Row>
+      </Col>,
+    );
+  };
 
   return (
     <Screen isError={vm.isError} onRefresh={vm.onRefresh}>

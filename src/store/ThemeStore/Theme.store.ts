@@ -85,6 +85,10 @@ export class ThemeStore implements IThemeStore {
       white: ColorsVars.white,
       violet: ColorsVars.violet,
       transparent: ColorsVars.transparent,
+      disabledText: ColorsVars.disabledText,
+      gray: ColorsVars.gray,
+      red: ColorsVars.red,
+      modalBackground: ColorsVars.modalBackground,
       elementPrimary: ColorsVars.elementPrimary[index],
       secondaryPrimary: ColorsVars.secondaryPrimary[index],
       elementDisabled: ColorsVars.elementDisabled[index],
@@ -104,6 +108,7 @@ export class ThemeStore implements IThemeStore {
       textGray: ColorsVars.textGray[index],
       textViolet: ColorsVars.textViolet[index],
       basicInversion: ColorsVars.basicInversion[index],
+      borderColor: ColorsVars.borderColor[index],
     };
   }
 

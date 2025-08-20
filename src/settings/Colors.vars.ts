@@ -7,6 +7,7 @@ export const ColorsVars = {
   disabledText: '#acacac',
   gray: '#858585',
   red: '#ed3e3e',
+  modalBackground: 'rgba(0,0,0,0.8)',
 
   // background
   bgBasic : ['#ffffff', '#000000'],
@@ -22,7 +23,6 @@ export const ColorsVars = {
   elementDanger: ['#ed3e3e', '#cd3b3b'],
   elementGreen: ['#2a9362', '#1f6c49'],
 
-
   // text
   textPrimary: ['#302F2D', '#e8e8e8'],
   textWhite: ['#ffffff', '#ffffff'],
@@ -35,4 +35,5 @@ export const ColorsVars = {
 
   // other
   basicInversion : ['#000000', '#ffffff'],
+  borderColor: ['#070707', '#808080'],
 };
