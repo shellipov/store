@@ -1,4 +1,4 @@
-package com.d2c
+package com.store.bundleid
 
 import android.app.Application
 import com.facebook.react.PackageList

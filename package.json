@@ -14,7 +14,8 @@
     "reinstall": "rm -rf node_modules package-lock.json && npm install",
     "postinstall": "patch-package",
     "adb-tcp-8081": "adb reverse tcp:8081 tcp:8081",
-    "adb-tcp-9090": "adb reverse tcp:9090 tcp:9090"
+    "adb-tcp-9090": "adb reverse tcp:9090 tcp:9090",
+    "rename": "npx react-native-rename \"Store\" -b com.new.bundleid"
   },
   "dependencies": {
     "@eslint/js": "^9.24.0",
